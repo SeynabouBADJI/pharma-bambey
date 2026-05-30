@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# PharmaGarde Bambey — Structure React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Stack
+- **React 18** + React Router v6
+- **Axios** pour les appels API
+- **Leaflet / React-Leaflet** pour la carte interactive
+- **React-Toastify** pour les notifications
+- **Spring Boot** (backend — port 8080)
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Arborescence du projet
 
-### `npm start`
+```
+pharma-bambey/
+├── .env                          # REACT_APP_API_URL=http://localhost:8080/api
+├── package.json
+├── public/
+│   └── index.html
+└── src/
+    ├── App.js                    # Router principal + layout global
+    ├── index.js
+    │
+    ├── services/
+    │   └── api.js                # Axios instance + tous les appels API
+    │                               (pharmacieService, medicamentService,
+    │                                stockService, gardeService, authService)
+    │
+    ├── hooks/
+    │   └── index.js              # useGarde | usePharmacie | useMedicament
+    │
+    ├── pages/
+    │   ├── HomePage.js           # Page d'accueil (hero + stats + grille)
+    │   ├── PharmaciesPage.js     # Liste de toutes les pharmacies
+    │   ├── GardePage.js          # Planning de garde (calendrier)
+    │   ├── MedicamentsPage.js    # Recherche de médicaments
+    │   ├── StockPage.js          # Gestion du stock (admin)
+    │   ├── LoginPage.js          # Formulaire de connexion
+    │   └── NotFoundPage.js       # Page 404
+    │
+    ├── components/
+    │   ├── layout/
+    │   │   ├── Navbar.js         # Barre de navigation + menu mobile
+    │   │   └── Footer.js
+    │   │
+    │   ├── common/
+    │   │   ├── StatsBanner.js    # 3 chiffres clés sur une ligne
+    │   │   ├── PrivateRoute.js   # Garde-route JWT pour pages admin
+    │   │   └── Spinner.js
+    │   │
+    │   ├── garde/
+    │   │   └── GardeList.js      # Cartes pharmacies de garde du jour
+    │   │
+    │   ├── medicaments/
+    │   │   ├── StockTable.js     # Tableau médicaments + barres de stock
+    │   │   └── AlerteStock.js    # Bandeau d'alerte stock bas
+    │   │
+    │   └── map/
+    │       └── MapView.js        # Carte Leaflet centrée sur Bambey
+    │
+    └── styles/
+        └── index.css             # Styles globaux (palette verte #0B5C3D)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Routes
 
-### `npm test`
+| Route          | Accès  | Description                        |
+|----------------|--------|------------------------------------|
+| `/`            | Public | Page d'accueil                     |
+| `/pharmacies`  | Public | Liste complète des pharmacies      |
+| `/garde`       | Public | Planning de garde / calendrier     |
+| `/medicaments` | Public | Recherche de médicaments           |
+| `/stock`       | Admin  | Gestion des stocks (JWT requis)    |
+| `/login`       | Public | Connexion administrateur           |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Appels API vers Spring Boot
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Service            | Endpoint                          | Méthode |
+|--------------------|-----------------------------------|---------|
+| Pharmacies de garde | `/api/pharmacies/garde`          | GET     |
+| Toutes pharmacies  | `/api/pharmacies`                 | GET     |
+| Stock médicaments  | `/api/medicaments`                | GET     |
+| Alertes stock bas  | `/api/medicaments/alertes`        | GET     |
+| Recherche méd.     | `/api/medicaments/search?q=...`   | GET     |
+| Garde du jour      | `/api/gardes?date=YYYY-MM-DD`     | GET     |
+| Connexion          | `/api/auth/login`                 | POST    |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Démarrage
 
-### `npm run eject`
+```bash
+# Installer les dépendances
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Lancer en développement (Spring Boot doit tourner sur :8080)
+npm start
+```
